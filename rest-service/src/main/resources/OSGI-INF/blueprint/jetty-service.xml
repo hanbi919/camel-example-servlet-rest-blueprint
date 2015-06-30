@@ -44,8 +44,8 @@
           class="org.apache.camel.component.metrics.routepolicy.MetricsRoutePolicyFactory"/>-->
 
 
-    <reference id="userRestService" interface="com.rexen.test.api.IUserService"/>
-    <!--<bean id="userRestService" class="com.rexen.test.route.UserRestServiceImpl">
+    <reference id="userService" interface="com.rexen.test.api.IUserService"/>
+    <!--<bean id="userService" class="com.rexen.test.route.UserRestServiceImpl">
         <property name="userService" ref="userService"/>
             </bean>-->
     <!-- <camelContext id="myCamel" xmlns="http://camel.apache.org/schema/blueprint">
@@ -61,30 +61,31 @@
              Notice: This is optional, but needed if the RestRegistry should enlist accurate information.
              You can access the RestRegistry from JMX at runtime -->
         <restConfiguration component="jetty" bindingMode="json"
+                           contextPath="/camel/rest" host="localhost"
                            port="8189">
             <dataFormatProperty key="prettyPrint" value="true"/>
         </restConfiguration>
 
         <!-- defines the rest services using the context-path /user -->
-        <rest  path="/camel/rest/user" consumes="application/json" produces="application/json">
+        <rest  path="/user" consumes="application/json" produces="application/json">
             <description>User rest service</description>
 
             <!-- this is a rest GET to view an user by the given id -->
             <get uri="/{id}" outType="com.rexen.test.model.User">
                 <description>Find user by id</description>
-                <to uri="bean:userRestService?method=getUser(${header.id})"/>
+                <to uri="bean:userService?method=getUser(${header.id})"/>
             </get>
 
             <!-- this is a rest PUT to create/update an user -->
             <put type="com.rexen.test.model.User">
                 <description>Updates or create a user</description>
-                <to uri="bean:userRestService?method=updateUser"/>
+                <to uri="bean:userService?method=updateUser"/>
             </put>
 
             <!-- this is a rest GET to find all users -->
             <get uri="/findAll" outType="com.rexen.test.model.User[]">
                 <description>Find all users</description>
-                <to uri="bean:userRestService?method=listUsers"/>
+                <to uri="bean:userService?method=listUsers"/>
             </get>
 
         </rest>
