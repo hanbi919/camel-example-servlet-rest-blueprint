@@ -1,2 +1,0 @@
-#Import-Package: javax.inject,javax.servlet,*
-Bundle-Activator=activator.Activator
